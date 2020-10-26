@@ -16,10 +16,10 @@ function drawLEDs () {
         pins.analogReadPin(AnalogPin.P3), 
         pins.analogReadPin(AnalogPin.P4)
     ];
-    basic.clearScreen();
     for (let i=1; i<=5; i++) {
         pins_data.forEach((val, index) => {
             if (val / 200 >= i) led.plot(index, 5-i);
+            else led.unplot(index, 5-i);
         });
     }
 }
