@@ -4,7 +4,7 @@ input.onGesture(Gesture.FreeFall, function () {
     bluetooth.uartWriteString("fall;")
 })
 function jopa () {
-    pins_data = [
+    let pins_data = [
         pins.analogReadPin(AnalogPin.P0), 
         pins.analogReadPin(AnalogPin.P1), 
         pins.analogReadPin(AnalogPin.P2), 
@@ -12,5 +12,4 @@ function jopa () {
         pins.analogReadPin(AnalogPin.P4)
     ]
 }
-let pins_data: number[] = []
 
