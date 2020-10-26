@@ -1,9 +1,11 @@
+// Init BLE services
 bluetooth.startIOPinService()
 bluetooth.startAccelerometerService()
 input.onGesture(Gesture.FreeFall, function () {
     bluetooth.uartWriteString("fall;")
 })
-function jopa () {
+
+function drawLEDs() {
     let pins_data = [
         pins.analogReadPin(AnalogPin.P0), 
         pins.analogReadPin(AnalogPin.P1), 
@@ -12,4 +14,3 @@ function jopa () {
         pins.analogReadPin(AnalogPin.P4)
     ]
 }
-
