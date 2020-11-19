@@ -1,5 +1,6 @@
 // Initial sleep state
 let sleep = true;
+let uart_busy = false;
 // Turn off screen
 led.enable(false);
 
@@ -7,44 +8,33 @@ input.onButtonPressed(Button.A, function () {
     if (sleep) {
         // Boot up
         led.enable(true);
-        if (Math.randomBoolean()) {
-            // Animation 1
-            for (let i=-5; i<10; i++) {
-                for (let x=0; x<5; x++) {
-                    console.log(x);
-                    let max = Math.abs(x - i)
-                    for (let y=4; y>=0; y--) {
-                        console.log(y);
-                        if (y >= max) led.plot(x, y);
-                        else led.unplot(x, y);
-                    }
-                }
-                basic.pause(100);
+        // Animation
+        for (let i=0; i<9; i++) {
+            for (let x=0; x<5; x++) {
+                led.plot(x, i-x);
             }
-        } else {
-            // Animation 2
-            for (let i=0; i<9; i++) {
-                for (let x=0; x<5; x++) {
-                    led.plot(x, i-x);
-                }
-                basic.pause(100);
-            }
+            basic.pause(100);
         }
         basic.clearScreen();
 
         // Init BLE services
-        bluetooth.startIOPinService();
+        //bluetooth.startIOPinService();
         bluetooth.startAccelerometerService();
         bluetooth.startUartService();
-        input.onGesture(Gesture.Shake, function () {
-            bluetooth.uartWriteLine("catcat");
+        bluetooth.onBluetoothConnected(function () {
             basic.showIcon(IconNames.Heart);
-            pause(1000);
-            basic.clearScreen();
+            uart_busy = true;
+            for (let i=0; i<10; i++) {
+                pause(1000);
+                bluetooth.uartWriteString("MUSE-TEST");
+            }
+            uart_busy = false;
         })
-        basic.forever(function () {
-            drawLEDs();
+        input.onGesture(Gesture.Shake, function () {
+            if (!uart_busy) bluetooth.uartWriteString("shaked");
         })
+
+        basic.forever(drawLEDs);
 
         sleep = false;
     } else control.reset();
